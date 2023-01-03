@@ -7,8 +7,7 @@ import Skills from '@/presentation/components/skills';
 import Courses from '@/presentation/components/courses';
 import { CourseContext } from './_app';
 
-import Switch from '@mui/material/Switch';
-const label = { inputProps: { "aria-label": "Switch demo" } };
+import Grid from '@mui/material/Grid';
 
 const getCourses = async (): Promise<Course[]> => {
   const res = await fetch('http://localhost:3000/api/getCourses');
@@ -65,10 +64,14 @@ const Home = memo(function Hello(props: IProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Switch {...label} defaultChecked />
-
-      <Skills />
-      <Courses courses={props.data.courses} />
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <Skills />
+        </Grid>
+        <Grid item xs={9}>
+          <Courses courses={props.data.courses} />
+        </Grid>
+      </Grid>
     </>
   );
 });
