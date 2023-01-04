@@ -49,14 +49,13 @@ export default function App({ Component, emotionCache = clientSideEmotionCache, 
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
             <AppBar
-              position="static"
-              color="transparent"
+              position="fixed"
               elevation={0}
-              style={{ height: 60, paddingLeft: 15, display: 'flex', justifyContent: 'center' }}
+              style={{ backgroundColor: 'white', height: 60, paddingLeft: 15, display: 'flex', justifyContent: 'center' }}
             >
               <Image src="/logo.svg" alt="me" width="150" height="50" />
             </AppBar>
-            <hr style={{ margin: 0 }} />
+            <hr style={{ margin: '60px 0 0 0' }} />
             <Component {...pageProps} />
           </CourseContext.Provider>
         </QueryClientProvider>

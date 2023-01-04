@@ -9,31 +9,30 @@ import { CourseContext } from './_app';
 
 import Grid from '@mui/material/Grid';
 
-const getCourses = async (): Promise<Course[]> => {
-  const res = await fetch('http://localhost:3000/api/getCourses');
+const getCourses = async (): Promise<any> => {
+  const res = await fetch('http://localhost:3000/api/course/getAll', {
+    method: 'POST',
+    body: JSON.stringify({
+      user_id: 'testuser',
+    }),
+  });
   return await res.json();
 };
 
 const getSkills = async (): Promise<Course[]> => {
-  const res = await fetch('http://localhost:3000/api/getCourses');
+  const res = await fetch('http://localhost:3000/api/skill/getAll', {
+    method: 'POST',
+    body: JSON.stringify({
+      user_id: 'testuser',
+    }),
+  });
   return await res.json();
 };
 
 export async function getServerSideProps() {
   const data = {
     courses: await getCourses(),
-    skills: [
-      {
-        id: '123',
-        name: 'Office',
-        isSelected: true,
-      },
-      {
-        id: '124',
-        name: 'Computer',
-        isSelected: false,
-      },
-    ],
+    skills: await getSkills(),
   };
   return {
     props: {
@@ -65,10 +64,10 @@ const Home = memo(function Hello(props: IProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Skills />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <Courses courses={props.data.courses} />
         </Grid>
       </Grid>
