@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id                  String                @id @default(uuid())
+  UserFavoriteCourses UserFavoriteCourses[]
+  UserSelectedSkills  UserSelectedSkills[]
+}
+
+model Skill {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  UserSelectedSkills UserSelectedSkills[]
+  CoursesAndSkills   CoursesAndSkills[]
+}
+
+model Course {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  video_url           String
+  UserFavoriteCourses UserFavoriteCourses[]
+  CoursesAndSkills    CoursesAndSkills[]
+}
+
+model UserFavoriteCourses {
+  user     User   @relation(fields: [userId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id])
+  userId   String
+  courseId Int
+
+  @@id([userId, courseId])
+}
+
+model UserSelectedSkills {
+  user    User   @relation(fields: [userId], references: [id])
+  skill   Skill  @relation(fields: [skillId], references: [id])
+  userId  String
+  skillId Int
+
+  @@id([userId, skillId])
+}
+
+model CoursesAndSkills {
+  skill    Skill  @relation(fields: [skillId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id])
+  skillId  Int
+  courseId Int
+
+  @@id([courseId, skillId])
+}
