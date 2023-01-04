@@ -1,9 +1,7 @@
-import { Skill } from './index';
-
-export interface Course {
-  id: string;
-  name: string;
-  url: string;
-  skills: Skill[];
+import { Course as CourseModel } from '@prisma/client';
+interface Course extends CourseModel {
   isFavorite: boolean;
+  skills: number[];
 }
+
+export type { Course };

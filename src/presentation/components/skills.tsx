@@ -3,7 +3,7 @@ import React, { useContext, memo } from 'react';
 import { CourseContext } from '@/pages/_app';
 import Stack from '@mui/material/Stack';
 import { Skill } from '@/domain/models';
-import CustomChip from './CustomChip';
+import CustomChip from './customChip';
 
 const Skills = memo(function Skills() {
   const [store, setStore] = useContext(CourseContext)!;
