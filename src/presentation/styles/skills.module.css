@@ -1,0 +1,13 @@
+.skillsWrapper {
+  padding: 0 20px;
+  height: calc(100vh - 75px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.skillChipWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

@@ -1,0 +1,15 @@
+.coursesWrapper {
+  padding: 0 20px;
+  height: calc(100vh - 65px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  overflow: auto;
+}
+
+.availableCoursesWrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}

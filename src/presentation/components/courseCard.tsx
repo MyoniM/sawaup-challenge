@@ -25,11 +25,14 @@ export default function CourseCard({ name, url, isFavorite }: IProps) {
       autoplay: 0,
     },
   };
+  const videoId = url.split("?v=")[1]
   return (
     <div className={styles.cardWrapper}>
       <Card sx={{ maxWidth: 275 }}>
-        <IconButton aria-label="add to favorites" className={styles.favIco}>♥</IconButton>
-        <YouTube videoId="Vl0H-qTclOg" opts={opts} onReady={onPlayerReady} />
+        <IconButton aria-label="add to favorites" className={styles.favIco}>
+          ♥
+        </IconButton>
+        <YouTube videoId={videoId} opts={opts} onReady={onPlayerReady} />
         <CardHeader title={name} />
       </Card>
     </div>
