@@ -1,37 +1,64 @@
-import React, { useContext, memo } from 'react';
+import React, { memo } from 'react';
 
-import { useQueryClient } from 'react-query';
-import { CourseContext } from '@/pages/_app';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 import { Skill } from '@/domain/models';
-import CustomChip from './customChip';
+import { RemoteSelectSkill } from '@/data/usecases/skill/remote-select-skill';
+import { RemoteGetSkill } from '@/data/usecases/skill/remote-get-skill';
 
+import CustomChip from './customChip';
 import styles from '@/presentation/styles/skills.module.css';
 
-const Skills = memo(function Skills() {
-  const queryClient = useQueryClient();
-  console.log(queryClient.getQueryData('courses'));
+interface IProps {
+  skills: Skill[];
+}
 
-  const [store, setStore] = useContext(CourseContext)!;
+const Skills = memo(function Skills({ skills }: IProps) {
+  const queryClient = useQueryClient();
+
+  const remoteGetSkills = new RemoteGetSkill().getAll;
+  const remoteSelectSkill = new RemoteSelectSkill().select;
+
+  const { data } = useQuery('skills', () => remoteGetSkills({ user_id: 'testUser' }), {
+    initialData: skills,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const mutation = useMutation(
+    (newSkill: Skill) =>
+      remoteSelectSkill({
+        user_id: 'testUser',
+        skill_id: newSkill.id,
+        select: !newSkill.isSelected,
+      }),
+    {
+      // Always refetch after error or success:
+      onSettled: async () => {
+        await queryClient.invalidateQueries('skills');
+        await queryClient.invalidateQueries('courses');
+      },
+    }
+  );
 
   const selectedSkills: Skill[] = [];
   const availableSkills: Skill[] = [];
 
-  store.skills.forEach((s) => {
+  data?.forEach((s) => {
     if (s.isSelected) selectedSkills.push(s);
     else availableSkills.push(s);
   });
 
   const handleSelect = (skillId: number) => {
-    const skills = store.skills;
+    const skills = queryClient.getQueryData('skills') as Skill[];
+
     const selectedSkillsCount = skills.filter((s) => s.isSelected).length;
 
     const skillIdx = skills.findIndex((s) => s.id === skillId);
     if (selectedSkillsCount === 10 && !skills[skillIdx].isSelected) return;
     if (selectedSkillsCount <= 2 && skills[skillIdx].isSelected) return;
 
-    skills[skillIdx].isSelected = !skills[skillIdx].isSelected;
-
-    setStore({ skills });
+    mutation.mutate(skills[skillIdx]);
   };
 
   return (

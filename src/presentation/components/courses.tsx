@@ -1,16 +1,17 @@
 import 'react-alice-carousel/lib/alice-carousel.css';
 
-import React, { useContext, useMemo, memo } from 'react';
-import AliceCarousel from 'react-alice-carousel';
-import { useQuery } from 'react-query';
+import React, { useMemo, memo } from 'react';
 
-import { Course } from '@/domain/models';
-import { CourseContext } from '@/pages/_app';
+import AliceCarousel from 'react-alice-carousel';
+import { useQuery, useQueryClient } from 'react-query';
+
+import { Course, Skill } from '@/domain/models';
+import { RemoteGetCourse } from '@/data/usecases/course/remote-get-course';
+
 import CourseCard from './courseCard';
+import EmptyCourseList from './emptyCourseList';
 
 import styles from '@/presentation/styles/courses.module.css';
-import EmptyCourseList from './emptyCourseList';
-import { RemoteGetCourse } from '@/data/usecases/course/remote-get-course';
 
 interface IProps {
   courses: Course[];
@@ -23,7 +24,8 @@ const responsive = {
 };
 
 const Courses = memo(function Courses({ courses }: IProps) {
-  const [store] = useContext(CourseContext)!;
+  const queryClient = useQueryClient();
+  const skills = queryClient.getQueryData('skills') as Skill[];
 
   const remoteGetCourse = new RemoteGetCourse().getAll;
 
@@ -33,7 +35,7 @@ const Courses = memo(function Courses({ courses }: IProps) {
     refetchOnWindowFocus: false,
   });
 
-  const selectedSkillsId = store.skills.map((s) => s.isSelected && s.id);
+  const selectedSkillsId = skills.map((s) => s.isSelected && s.id);
   const filteredCourses = useMemo(() => data?.filter((c) => c.skills.some((skill) => selectedSkillsId.includes(skill))), [selectedSkillsId, data]);
 
   return (
@@ -44,6 +46,7 @@ const Courses = memo(function Courses({ courses }: IProps) {
           {filteredCourses?.length === 0 && <EmptyCourseList />}
           <AliceCarousel
             key="carousel"
+            ssrSilentMode
             disableDotsControls
             responsive={responsive}
             items={React.Children.toArray(filteredCourses?.map((c) => <CourseCard course={c} />))}

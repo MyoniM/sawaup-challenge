@@ -1,5 +1,7 @@
-import React, { useContext, memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import Head from 'next/head';
+
+import Grid from '@mui/material/Grid';
 
 import { GetCourses } from '@/infrastructure/services/coursesStorage';
 import { GetSkills } from '@/infrastructure/services/skillStorage';
@@ -8,9 +10,7 @@ import { Course, Skill } from '@/domain/models';
 
 import Skills from '@/presentation/components/skills';
 import Courses from '@/presentation/components/courses';
-import { CourseContext } from './_app';
 
-import Grid from '@mui/material/Grid';
 
 export async function getServerSideProps() {
   const getCourses = new GetCourses();
@@ -34,12 +34,6 @@ interface IProps {
 }
 
 const Home = memo(function Hello(props: IProps) {
-  const [, setStore] = useContext(CourseContext)!;
-
-  useEffect(() => {
-    setStore({ skills: props.data.skills });
-  }, [props.data.skills, setStore]);
-
   return (
     <>
       <Head>
@@ -50,7 +44,7 @@ const Home = memo(function Hello(props: IProps) {
       </Head>
       <Grid container spacing={2}>
         <Grid item xs={2}>
-          <Skills />
+          <Skills skills={props.data.skills} />
         </Grid>
         <Grid item xs={10}>
           <Courses courses={props.data.courses} />
