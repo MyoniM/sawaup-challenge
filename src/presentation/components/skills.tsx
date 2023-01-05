@@ -1,5 +1,6 @@
 import React, { useContext, memo } from 'react';
 
+import { useQueryClient } from 'react-query';
 import { CourseContext } from '@/pages/_app';
 import { Skill } from '@/domain/models';
 import CustomChip from './customChip';
@@ -7,6 +8,9 @@ import CustomChip from './customChip';
 import styles from '@/presentation/styles/skills.module.css';
 
 const Skills = memo(function Skills() {
+  const queryClient = useQueryClient();
+  console.log(queryClient.getQueryData('courses'));
+
   const [store, setStore] = useContext(CourseContext)!;
 
   const selectedSkills: Skill[] = [];
