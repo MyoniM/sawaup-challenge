@@ -30,7 +30,6 @@ const Courses = memo(function Courses({ courses }: IProps) {
 
   const selectedSkillsId = store.skills.map((s) => s.isSelected && s.id);
   const filteredCourses = useMemo(() => data?.filter((c) => c.skills.some((skill) => selectedSkillsId.includes(skill))), [selectedSkillsId, data]);
-
   return (
     <div className={styles.coursesWrapper}>
       <div>
@@ -40,7 +39,6 @@ const Courses = memo(function Courses({ courses }: IProps) {
         </div>
       </div>
       <div>
-        {/* hjkl */}
         <h3>Available courses</h3>
         <div className={styles.availableCoursesWrapper}>
           {React.Children.toArray(data!.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
