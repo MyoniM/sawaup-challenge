@@ -10,15 +10,11 @@ import CourseCard from './courseCard';
 
 import styles from '@/presentation/styles/courses.module.css';
 import EmptyCourseList from './emptyCourseList';
-
-const getCourses = async (): Promise<Course[]> => {
-  const res = await fetch('/api/course/getAll');
-  return await res.json();
-};
+import { RemoteGetCourse } from '@/data/usecases/course/remote-get-course';
 
 interface IProps {
   courses: Course[];
-} 
+}
 
 const responsive = {
   0: { items: 1 },
@@ -27,11 +23,11 @@ const responsive = {
 };
 
 const Courses = memo(function Courses({ courses }: IProps) {
-  console.log('OO');
-
   const [store] = useContext(CourseContext)!;
 
-  const { data } = useQuery('courses', getCourses, {
+  const remoteGetCourse = new RemoteGetCourse().getAll;
+
+  const { data } = useQuery('courses', () => remoteGetCourse({ user_id: 'testUser' }), {
     initialData: courses,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -39,6 +35,7 @@ const Courses = memo(function Courses({ courses }: IProps) {
 
   const selectedSkillsId = store.skills.map((s) => s.isSelected && s.id);
   const filteredCourses = useMemo(() => data?.filter((c) => c.skills.some((skill) => selectedSkillsId.includes(skill))), [selectedSkillsId, data]);
+
   return (
     <div className={styles.coursesWrapper}>
       <div>
@@ -49,15 +46,13 @@ const Courses = memo(function Courses({ courses }: IProps) {
             key="carousel"
             disableDotsControls
             responsive={responsive}
-            items={React.Children.toArray(filteredCourses?.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
+            items={React.Children.toArray(filteredCourses?.map((c) => <CourseCard course={c} />))}
           />
         </div>
       </div>
       <div>
         <h3>Available courses</h3>
-        <div className={styles.availableCoursesWrapper}>
-          {React.Children.toArray(data!.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
-        </div>
+        <div className={styles.availableCoursesWrapper}>{React.Children.toArray(data!.map((c) => <CourseCard course={c} />))}</div>
       </div>
     </div>
   );

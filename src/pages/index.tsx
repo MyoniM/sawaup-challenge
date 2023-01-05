@@ -12,32 +12,12 @@ import { CourseContext } from './_app';
 
 import Grid from '@mui/material/Grid';
 
-const getCourses = async (): Promise<any> => {
-  const res = await fetch('/api/course/getAll', {
-    method: 'POST',
-    body: JSON.stringify({
-      user_id: 'testuser',
-    }),
-  });
-  return await res.json();
-};
-
-const getSkills = async (): Promise<Course[]> => {
-  const res = await fetch('http://localhost:3000/api/skill/getAll', {
-    method: 'POST',
-    body: JSON.stringify({
-      user_id: 'testuser',
-    }),
-  });
-  return await res.json();
-};
-
 export async function getServerSideProps() {
   const getCourses = new GetCourses();
   const getSkills = new GetSkills();
   const data = {
-    courses: await getCourses.getAll({ user_id: 'testuser' }),
-    skills: await getSkills.getAll({ user_id: 'testuser' }),
+    courses: await getCourses.getAll({ user_id: 'testUser' }),
+    skills: await getSkills.getAll({ user_id: 'testUser' }),
   };
   return {
     props: {
