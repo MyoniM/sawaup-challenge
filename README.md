@@ -3,7 +3,9 @@ This is a repo for Sawaup Senior Fullstack - Challenge
 Deployed URL: https://sawaup-challenge-bh4k.vercel.app/
 
 The project is build using:
+- Clean Architecture
 - NextJs
+- Typescript
 - Prisma ORM
 - PostgeSql
 
@@ -17,3 +19,12 @@ Here is the light house metric for the app:
 - I did not stress on the responsiveness since it was not stated in the challenge docs.
 - Didnt implement tests b/c of time.
 
+<hr />
+##If you clone and run the project locally:
+- sawa.postman_collection.json is a Postman collection. It has all the endpoints.
+- Update the DATABASE_URL's value inside .env file.  If you use a cloud-hosted database for development, you need SHADOW_DATABASE_URL. Here is a link https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually\
+- Run database migration using the command ```npx prisma migrate dev --schema=./src/prisma/schema.prisma```
+- Generate types for prisma and reload IDE ```npx prisma generate --schema=./src/prisma/schema.prisma```
+- Seed the data inside the excel file to database with the command ```npx prisma db seed```. Make sure you have ts-node globally installed.
+
+Thanks.
