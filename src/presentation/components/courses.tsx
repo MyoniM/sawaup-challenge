@@ -18,7 +18,7 @@ const getCourses = async (): Promise<Course[]> => {
 
 interface IProps {
   courses: Course[];
-}
+} 
 
 const responsive = {
   0: { items: 1 },
@@ -27,6 +27,8 @@ const responsive = {
 };
 
 const Courses = memo(function Courses({ courses }: IProps) {
+  console.log('OO');
+
   const [store] = useContext(CourseContext)!;
 
   const { data } = useQuery('courses', getCourses, {
@@ -37,7 +39,6 @@ const Courses = memo(function Courses({ courses }: IProps) {
 
   const selectedSkillsId = store.skills.map((s) => s.isSelected && s.id);
   const filteredCourses = useMemo(() => data?.filter((c) => c.skills.some((skill) => selectedSkillsId.includes(skill))), [selectedSkillsId, data]);
-
   return (
     <div className={styles.coursesWrapper}>
       <div>
@@ -50,7 +51,6 @@ const Courses = memo(function Courses({ courses }: IProps) {
             responsive={responsive}
             items={React.Children.toArray(filteredCourses?.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
           />
-          {}
         </div>
       </div>
       <div>
