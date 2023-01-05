@@ -1,6 +1,9 @@
 import React, { useContext, memo, useEffect } from 'react';
 import Head from 'next/head';
 
+import { GetCourses } from '@/infrastructure/services/coursesStorage';
+import { GetSkills } from '@/infrastructure/services/skillStorage';
+
 import { Course, Skill } from '@/domain/models';
 
 import Skills from '@/presentation/components/skills';
@@ -10,7 +13,7 @@ import { CourseContext } from './_app';
 import Grid from '@mui/material/Grid';
 
 const getCourses = async (): Promise<any> => {
-  const res = await fetch('http://localhost:3000/api/course/getAll', {
+  const res = await fetch('/api/course/getAll', {
     method: 'POST',
     body: JSON.stringify({
       user_id: 'testuser',
@@ -30,9 +33,11 @@ const getSkills = async (): Promise<Course[]> => {
 };
 
 export async function getServerSideProps() {
+  const getCourses = new GetCourses();
+  const getSkills = new GetSkills();
   const data = {
-    courses: await getCourses(),
-    skills: await getSkills(),
+    courses: await getCourses.getAll({ user_id: 'testuser' }),
+    skills: await getSkills.getAll({ user_id: 'testuser' }),
   };
   return {
     props: {

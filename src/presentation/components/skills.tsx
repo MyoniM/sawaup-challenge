@@ -1,7 +1,6 @@
 import React, { useContext, memo } from 'react';
 
 import { CourseContext } from '@/pages/_app';
-import Stack from '@mui/material/Stack';
 import { Skill } from '@/domain/models';
 import CustomChip from './customChip';
 
@@ -18,24 +17,37 @@ const Skills = memo(function Skills() {
     else availableSkills.push(s);
   });
 
+  const handleSelect = (skillId: number) => {
+    const skills = store.skills;
+    const selectedSkillsCount = skills.filter((s) => s.isSelected).length;
+
+    const skillIdx = skills.findIndex((s) => s.id === skillId);
+    if (selectedSkillsCount === 10 && !skills[skillIdx].isSelected) return;
+    if (selectedSkillsCount <= 2 && skills[skillIdx].isSelected) return;
+
+    skills[skillIdx].isSelected = !skills[skillIdx].isSelected;
+
+    setStore({ skills });
+  };
+
   return (
     <div className={styles.skillsWrapper}>
       <div>
         <h3>Selected Skills</h3>
-        <Stack direction="row" spacing={1}>
+        <div className={styles.skillChipWrapper}>
           {React.Children.toArray(
             selectedSkills.map((s) => {
-              return <CustomChip name={s.name} />;
+              return <CustomChip skill={s} handleSelect={handleSelect} />;
             })
           )}
-        </Stack>
+        </div>
       </div>
       <div>
         <h3>Available Skills</h3>
         <div className={styles.skillChipWrapper}>
           {React.Children.toArray(
             availableSkills.map((s) => {
-              return <CustomChip name={s.name} />;
+              return <CustomChip skill={s} handleSelect={handleSelect} />;
             })
           )}
         </div>

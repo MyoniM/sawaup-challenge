@@ -9,15 +9,17 @@ import CourseCard from './courseCard';
 import styles from '@/presentation/styles/courses.module.css';
 
 const getCourses = async (): Promise<Course[]> => {
-  const res = await fetch('http://localhost:3000/api/getCourses');
+  const res = await fetch('/api/course/getAll');
   return await res.json();
 };
 
 interface IProps {
   courses: Course[];
-}
+} 
 
 const Courses = memo(function Courses({ courses }: IProps) {
+  console.log('OO');
+
   const [store] = useContext(CourseContext)!;
 
   const { data } = useQuery('courses', getCourses, {
@@ -26,22 +28,22 @@ const Courses = memo(function Courses({ courses }: IProps) {
     refetchOnWindowFocus: false,
   });
 
-  const [filters, setFilters] = useState([]);
-
-  const filteredCourses = useMemo(() => data!.filter((c) => true), [filters, courses]);
+  const selectedSkillsId = store.skills.map((s) => s.isSelected && s.id);
+  const filteredCourses = useMemo(() => data?.filter((c) => c.skills.some((skill) => selectedSkillsId.includes(skill))), [selectedSkillsId, data]);
 
   return (
     <div className={styles.coursesWrapper}>
       <div>
         <h3>Selected courses</h3>
         <div className={styles.availableCoursesWrapper}>
-          {React.Children.toArray(filteredCourses.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
+          {React.Children.toArray(filteredCourses?.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
         </div>
       </div>
       <div>
+        {/* hjkl */}
         <h3>Available courses</h3>
         <div className={styles.availableCoursesWrapper}>
-          {React.Children.toArray(filteredCourses.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
+          {React.Children.toArray(data!.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
         </div>
       </div>
     </div>
