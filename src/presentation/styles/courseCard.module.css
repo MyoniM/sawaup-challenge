@@ -1,5 +1,6 @@
 .cardWrapper {
   position: relative;
+  max-width: 275px;
 }
 
 .favIco {

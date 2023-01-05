@@ -1,5 +1,7 @@
-import React, { useContext, useState, useMemo, memo } from 'react';
+import 'react-alice-carousel/lib/alice-carousel.css';
 
+import React, { useContext, useMemo, memo } from 'react';
+import AliceCarousel from 'react-alice-carousel';
 import { useQuery } from 'react-query';
 
 import { Course } from '@/domain/models';
@@ -7,6 +9,7 @@ import { CourseContext } from '@/pages/_app';
 import CourseCard from './courseCard';
 
 import styles from '@/presentation/styles/courses.module.css';
+import EmptyCourseList from './emptyCourseList';
 
 const getCourses = async (): Promise<Course[]> => {
   const res = await fetch('/api/course/getAll');
@@ -15,11 +18,15 @@ const getCourses = async (): Promise<Course[]> => {
 
 interface IProps {
   courses: Course[];
-} 
+}
+
+const responsive = {
+  0: { items: 1 },
+  568: { items: 2 },
+  1024: { items: 4, itemsFit: 'contain' },
+};
 
 const Courses = memo(function Courses({ courses }: IProps) {
-  console.log('OO');
-
   const [store] = useContext(CourseContext)!;
 
   const { data } = useQuery('courses', getCourses, {
@@ -36,11 +43,17 @@ const Courses = memo(function Courses({ courses }: IProps) {
       <div>
         <h3>Selected courses</h3>
         <div className={styles.availableCoursesWrapper}>
-          {React.Children.toArray(filteredCourses?.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
+          {filteredCourses?.length === 0 && <EmptyCourseList />}
+          <AliceCarousel
+            key="carousel"
+            disableDotsControls
+            responsive={responsive}
+            items={React.Children.toArray(filteredCourses?.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
+          />
+          {}
         </div>
       </div>
       <div>
-        {/* hjkl */}
         <h3>Available courses</h3>
         <div className={styles.availableCoursesWrapper}>
           {React.Children.toArray(data!.map((c) => <CourseCard name={c.name} url={c.video_url} isFavorite={c.isFavorite} />))}
