@@ -13,8 +13,8 @@ export default function YouTubeLazyLoad({ youtubeID, title }: IProps) {
     <div>
       {showVideo ? (
         <iframe
-          width={275}
-          height={200}
+          width={384}
+          height={216}
           src={`https://www.youtube-nocookie.com/embed/${youtubeID}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -25,8 +25,9 @@ export default function YouTubeLazyLoad({ youtubeID, title }: IProps) {
           type="button"
           onClick={() => setShowVideo(true)}
           style={{ cursor: 'pointer', border: 'none', backgroundColor: 'transparent', padding: 0 }}
+          aria-label={`Play video ${title}`}
         >
-          <NextImage src={`https://img.youtube.com/vi/${youtubeID}/maxresdefault.jpg`} alt="" loading="lazy" height={200} width={275} />
+          <NextImage src={`https://img.youtube.com/vi/${youtubeID}/maxresdefault.jpg`} alt="" loading="lazy" height={216} width={384} />
           <div style={{ position: 'absolute', top: '50%', left: '50%', fontSize: '100px', transform: 'translate(-50%, -50%)', color: '#6c8ffc' }}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

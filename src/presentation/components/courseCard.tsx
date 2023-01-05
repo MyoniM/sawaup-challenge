@@ -39,7 +39,7 @@ export default function CourseCard({ course }: IProps) {
   const videoId = course.video_url.split('?v=')[1];
   return (
     <div className={styles.cardWrapper}>
-      <Card sx={{ maxWidth: 275 }}>
+      <Card sx={{ maxWidth: 384 }}>
         <IconButton
           aria-label="add to favorites"
           className={styles.favIco}
