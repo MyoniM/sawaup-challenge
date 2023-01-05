@@ -20,7 +20,7 @@ Here is the light house metric for the app:
 - Didnt implement tests b/c of time.
 
 <hr />
-##If you clone and run the project locally:
+## If you clone and run the project locally:
 - sawa.postman_collection.json is a Postman collection. It has all the endpoints.
 - Update the DATABASE_URL's value inside .env file.  If you use a cloud-hosted database for development, you need SHADOW_DATABASE_URL. Here is a link https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually\
 - Run database migration using the command ```npx prisma migrate dev --schema=./src/prisma/schema.prisma```
